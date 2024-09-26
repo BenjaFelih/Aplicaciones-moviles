@@ -103,8 +103,6 @@ class MainApp extends StatelessWidget {
                 ),
               ),
             ),
-
-            const SizedBox(height: 12.0),
           ],
         ),
       ),
