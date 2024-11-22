@@ -1,0 +1,129 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MainApp());
+}
+
+class MainApp extends StatelessWidget {
+  const MainApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        appBar: AppBar(
+          leading: const Icon(Icons.menu),
+          title: const Text('Texto Según Material Design'),
+          actions: const [
+            Icon(Icons.more_vert),
+          ],
+        ),
+        body: ListView(
+          padding: const EdgeInsets.all(16.0),
+          children: const [
+            Text(
+              'Headline 1',
+              style: TextStyle(
+                  fontSize: 96,
+                  fontWeight: FontWeight.w300,
+                  letterSpacing: -1.5),
+            ),
+            Text(
+              'Headline 2',
+              style: TextStyle(
+                  fontSize: 60,
+                  fontWeight: FontWeight.w300,
+                  letterSpacing: -0.5),
+            ),
+            Text(
+              'Headline 3',
+              style: TextStyle(
+                fontSize: 48,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+            Text(
+              'Headline 4',
+              style: TextStyle(
+                  fontSize: 34,
+                  fontWeight: FontWeight.w400,
+                  letterSpacing: 0.25),
+            ),
+            Text(
+              'Headline 5',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+            Text(
+              'Headline 6',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w500,
+                letterSpacing: 0.15,
+              ),
+            ),
+            Text(
+              'Subtitle 1',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
+                letterSpacing: 0.15,
+              ),
+            ),
+            Text(
+              'Subtitle 2',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                letterSpacing: 0.1,
+              ),
+            ),
+            Text(
+              'Body text 1',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
+                letterSpacing: 0.5,
+              ),
+            ),
+            Text(
+              'Body text 2',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
+                letterSpacing: 0.5,
+              ),
+            ),
+            Text(
+              'Button',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                letterSpacing: 1.25,
+              ),
+            ),
+            Text(
+              'Caption',
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w400,
+                letterSpacing: 0.4,
+              ),
+            ),
+            Text(
+              'Overline',
+              style: TextStyle(
+                fontSize: 10,
+                fontWeight: FontWeight.w400,
+                letterSpacing: 1.5,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

@@ -1,0 +1,143 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MainApp());
+}
+
+class MainApp extends StatelessWidget {
+  const MainApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        backgroundColor:
+            const Color.fromARGB(255, 255, 255, 255), // cambiar color aca
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0, // Flat app bar
+          leading: const Icon(Icons.group_add, color: Colors.black),
+          title: const Text(
+            'Inbox',
+            style: TextStyle(color: Colors.black),
+          ),
+          actions: const [
+            Icon(Icons.search, color: Colors.black),
+          ],
+          centerTitle: true,
+        ),
+
+        body: ListView(
+//Bloques normales
+
+          children: [
+            Container(
+              height: 200.0,
+              width: double.infinity,
+              color: Colors.grey,
+              child: const Text('tamano card'),
+            ),
+            const SizedBox(height: 12.0),
+            Container(
+              height: 148.0,
+              width: double.infinity,
+              color: Colors.blue,
+              child: const Text('Tamano item lista'),
+            ),
+            const SizedBox(height: 12.0),
+            Container(
+              height: 148.0,
+              width: double.infinity,
+              color: Colors.blue,
+              child: const Text('Tamano item lista'),
+            ),
+            const SizedBox(height: 12.0),
+            Container(
+              height: 148.0,
+              width: double.infinity,
+              color: Colors.blue,
+              child: const Text('Tamano item lista'),
+            ),
+            const SizedBox(height: 6.0),
+            //Bolques horizontales
+
+            Padding(
+              padding: const EdgeInsets.all(10.0), // Margin
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment
+                    .spaceBetween, // Space between the two containers
+                children: [
+                  Expanded(
+                    child: Container(
+                      height: 90.0,
+                      decoration: const BoxDecoration(
+                        color: Color.fromARGB(255, 207, 207, 207),
+                      ),
+                      child: const Center(child: Text('caja 1')),
+                    ),
+                  ),
+                  const SizedBox(width: 10.0),
+                  Expanded(
+                    child: Container(
+                      height: 90.0,
+                      decoration: const BoxDecoration(
+                        color: Color.fromARGB(255, 207, 207, 207),
+                      ),
+                      child: const Center(child: Text('caja 2')),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            //scroll horizontal
+
+            Container(
+              padding: const EdgeInsets.all(10.0), // Margin
+              height: 148.0, // Altura de 148 píxeles
+              color: Colors.transparent,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    Container(
+                      width: 180,
+                      margin: const EdgeInsets.only(right: 12.0),
+                      color: Colors.orange, // Color de fondo naranja
+                      child: const Center(child: Text('Container 1')),
+                    ),
+                    Container(
+                      width: 180,
+                      margin: const EdgeInsets.only(right: 12.0),
+                      color: Colors.orange, // Color de fondo naranja
+                      child: const Center(child: Text('Container 2')),
+                    ),
+                    Container(
+                      width: 180,
+                      margin: const EdgeInsets.only(right: 12.0),
+                      color: Colors.orange, // Color de fondo naranja
+                      child: const Center(child: Text('Container 3')),
+                    ),
+                    Container(
+                      width: 180,
+                      margin: const EdgeInsets.only(right: 12.0),
+                      color: Colors.orange, // Color de fondo naranja
+                      child: const Center(child: Text('Container 4')),
+                    ),
+                    Container(
+                      width: 180,
+                      margin: const EdgeInsets.only(right: 12.0),
+                      color: Colors.orange, // Color de fondo naranja
+                      child: const Center(child: Text('Container 5')),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ], //hasta aca
+        ),
+      ),
+    );
+  }
+}
