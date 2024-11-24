@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:lingochat/screens/home.dart';
 import 'package:lingochat/screens/splashscreens.dart';
-
+// Ajusta el path si es necesario
 import 'package:lingochat/themes/theme.dart';
 
 import 'firebase_options.dart';
