@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:lingochat/components/appbar.dart';
@@ -10,6 +12,7 @@ class Mantenedor extends StatefulWidget {
   const Mantenedor({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _MantenedorState createState() => _MantenedorState();
 }
 
@@ -78,13 +81,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _modificarUsuario(
       String id, Map<String, dynamic> usuario) async {
-    final _nombreController = TextEditingController(text: usuario['nombre']);
-    final _descripcionController =
+    final nombreController = TextEditingController(text: usuario['nombre']);
+    final descripcionController =
         TextEditingController(text: usuario['descripcion']);
-    String? _opcionSeleccionada1 = usuario['opcion1'];
-    String? _opcionSeleccionada2 = usuario['opcion2'];
+    String? opcionSeleccionada1 = usuario['opcion1'];
+    String? opcionSeleccionada2 = usuario['opcion2'];
 
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
 
     showDialog(
       context: context,
@@ -93,11 +96,11 @@ class _HomeScreenState extends State<HomeScreen> {
           title: const Text('Modificar Usuario'),
           content: SingleChildScrollView(
             child: Form(
-              key: _formKey,
+              key: formKey,
               child: Column(
                 children: [
                   TextFormField(
-                    controller: _nombreController,
+                    controller: nombreController,
                     decoration:
                         const InputDecoration(labelText: 'Nombre de la IA'),
                     validator: (value) {
@@ -109,7 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   const SizedBox(height: 20),
                   DropdownButtonFormField<String>(
-                    value: _opcionSeleccionada1,
+                    value: opcionSeleccionada1,
                     decoration: const InputDecoration(labelText: 'Género'),
                     items: ['Masculino', 'Femenino', 'Otro']
                         .map((categoria) => DropdownMenuItem(
@@ -118,14 +121,14 @@ class _HomeScreenState extends State<HomeScreen> {
                             ))
                         .toList(),
                     onChanged: (value) {
-                      _opcionSeleccionada1 = value;
+                      opcionSeleccionada1 = value;
                     },
                     validator: (value) =>
                         value == null ? 'Seleccione una categoría' : null,
                   ),
                   const SizedBox(height: 20),
                   DropdownButtonFormField<String>(
-                    value: _opcionSeleccionada2,
+                    value: opcionSeleccionada2,
                     decoration: const InputDecoration(labelText: 'Idioma'),
                     items: [
                       'Español',
@@ -140,14 +143,14 @@ class _HomeScreenState extends State<HomeScreen> {
                             ))
                         .toList(),
                     onChanged: (value) {
-                      _opcionSeleccionada2 = value;
+                      opcionSeleccionada2 = value;
                     },
                     validator: (value) =>
                         value == null ? 'Seleccione una prioridad' : null,
                   ),
                   const SizedBox(height: 20),
                   TextFormField(
-                    controller: _descripcionController,
+                    controller: descripcionController,
                     decoration: const InputDecoration(labelText: 'Descripción'),
                     maxLines: 4,
                     validator: (value) {
@@ -162,28 +165,31 @@ class _HomeScreenState extends State<HomeScreen> {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
+                        if (formKey.currentState!.validate()) {
                           // Actualizar los datos del usuario en Firestore
                           try {
                             await FirebaseFirestore.instance
                                 .collection('usuarios')
                                 .doc(id)
                                 .update({
-                              'nombre': _nombreController.text,
-                              'opcion1': _opcionSeleccionada1,
-                              'opcion2': _opcionSeleccionada2,
-                              'descripcion': _descripcionController.text,
+                              'nombre': nombreController.text,
+                              'opcion1': opcionSeleccionada1,
+                              'opcion2': opcionSeleccionada2,
+                              'descripcion': descripcionController.text,
                             });
 
                             // Cerrar el formulario
+                            // ignore: use_build_context_synchronously
                             Navigator.of(context).pop();
 
+                            // ignore: use_build_context_synchronously
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                   content: Text(
                                       'Usuario actualizado correctamente')),
                             );
                           } catch (e) {
+                            // ignore: use_build_context_synchronously
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                   content: Text('Error al actualizar')),
@@ -313,10 +319,22 @@ class _HomeScreenState extends State<HomeScreen> {
                       final usuarioId = usuarioDoc.id;
 
                       return ListTile(
+                        onTap: () {
+                          // Abre la pantalla de chat al tocar cualquier parte del ListTile
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ChatIAScreen(
+                                iaData: usuario,
+                              ),
+                            ),
+                          );
+                        },
                         leading: CircleAvatar(
                           backgroundImage: usuario['imagen'] != null
                               ? NetworkImage(usuario['imagen'])
                               : null,
+                          backgroundColor: Colors.blue,
                           child: usuario['imagen'] == null
                               ? Text(
                                   usuario['nombre']
@@ -325,16 +343,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                   style: const TextStyle(color: Colors.white),
                                 )
                               : null,
-                          backgroundColor: Colors.blue,
                         ),
                         title: Text(
                           '${usuario['nombre']}',
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                         subtitle: Text(
-                          usuario['opcion2'] != null
-                              ? usuario['opcion2']
-                              : 'Idioma no especificado',
+                          usuario['opcion2'] ?? 'Idioma no especificado',
                         ),
                         trailing: PopupMenuButton<String>(
                           onSelected: (value) {
@@ -446,6 +461,174 @@ class CallsScreen extends StatelessWidget {
       ),
       body: const Center(
         child: Text('Pantalla de mensajes'),
+      ),
+    );
+  }
+}
+
+//Pantalla del chat IA
+
+class ChatIAScreen extends StatefulWidget {
+  final Map<String, dynamic> iaData;
+
+  const ChatIAScreen({super.key, required this.iaData});
+
+  @override
+  State<ChatIAScreen> createState() => _ChatIAScreenState();
+}
+
+class _ChatIAScreenState extends State<ChatIAScreen> {
+  final TextEditingController _messageController = TextEditingController();
+  final List<Map<String, String>> _messages = [];
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  // Método que genera respuestas de presentación en diferentes idiomas
+  Future<String> _generateResponse(String idioma) async {
+    await Future.delayed(const Duration(seconds: 2));
+
+    switch (idioma) {
+      case 'Español':
+        return 'Hola, soy ${widget.iaData['nombre']}. ¿Cómo estás?';
+      case 'Inglés':
+        return 'Hello, I am ${widget.iaData['nombre']}. How are you?';
+      case 'Italiano':
+        return 'Ciao, sono ${widget.iaData['nombre']}. Come stai?';
+      case 'Japonés':
+        return 'こんにちは、私は${widget.iaData['nombre']}お元気ですか？';
+      case 'Portugués':
+        return 'Olá, eu sou ${widget.iaData['nombre']}. Como você está?';
+      default:
+        return 'Lo siento, no estoy configurado para este idioma.';
+    }
+  }
+
+  // Método para guardar la conversación en Firestore
+  Future<void> _saveConversation() async {
+    try {
+      final conversationRef = _firestore.collection('conversaciones').doc();
+      await conversationRef.set({
+        'ia_id': widget.iaData['id'],
+        'timestamp': FieldValue.serverTimestamp(),
+        'messages': _messages,
+      });
+    } catch (e) {
+      print("Error al guardar la conversación: $e");
+    }
+  }
+
+  Future<void> _sendMessage(String message) async {
+    setState(() {
+      _messages.add({'role': 'user', 'content': message});
+    });
+
+    // Obtener la respuesta en el idioma seleccionado por el usuario
+    String iaResponse = await _generateResponse(widget.iaData['opcion2']);
+
+    setState(() {
+      _messages.add({'role': 'ia', 'content': iaResponse});
+    });
+
+    _messageController.clear();
+
+    // Guardar la conversación después de cada mensaje
+    await _saveConversation();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Center(
+          child: Text(
+            widget.iaData['nombre'],
+            style: const TextStyle(
+              fontFamily: 'Rubik-Regular', // Aquí agregamos la tipografía
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.more_vert),
+            onPressed: () {
+              // Aquí puedes definir qué hacer al presionar el ícono de tres puntos
+              print("Más opciones");
+            },
+          ),
+        ],
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              itemCount: _messages.length,
+              itemBuilder: (context, index) {
+                final message = _messages[index];
+                final isUser = message['role'] == 'user';
+
+                return Container(
+                  alignment:
+                      isUser ? Alignment.centerRight : Alignment.centerLeft,
+                  child: Container(
+                    margin:
+                        const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: isUser ? Colors.grey[300] : Colors.blueAccent,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Text(
+                      message['content']!,
+                      style: TextStyle(
+                        color: isUser ? Colors.black : Colors.white,
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _messageController,
+                    decoration: InputDecoration(
+                      hintText: 'Escribe un mensaje...',
+                      hintStyle: const TextStyle(
+                        color: Colors
+                            .grey, // Cambia este color por el que prefieras
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide.none, // Sin borde visible
+                        borderRadius: BorderRadius.circular(
+                            50), // Solo esquinas redondeadas
+                      ), // Puedes redondear las esquinas
+// Elimina el contorno
+                      filled: true,
+                      fillColor:
+                          Colors.grey[200], // Color de fondo del TextField
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                CircleAvatar(
+                  backgroundColor: Colors.pinkAccent,
+                  child: IconButton(
+                    icon: const Icon(Icons.send, color: Colors.white),
+                    onPressed: () {
+                      if (_messageController.text.isNotEmpty) {
+                        _sendMessage(_messageController.text);
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -144,7 +144,7 @@ class _FormularioScreenState extends State<FormularioScreen> {
                       backgroundColor: Theme.of(context).colorScheme.primary,
                       foregroundColor: Colors.white,
                     ),
-                    child: const Text('REGISTRAR'),
+                    child: const Text('CREAR'),
                   ),
                 ),
               ],

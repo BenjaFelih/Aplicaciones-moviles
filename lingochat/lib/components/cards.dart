@@ -17,19 +17,29 @@ class CustomCard extends StatelessWidget {
     return Card(
       elevation: 4.0,
       margin: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            height: 65,
-            color: cardColor,
-            width: double.infinity,
-          ),
-          ListTile(
-            title: Text(title),
-            subtitle: Text(subtitle),
-          ),
-        ],
+      child: SizedBox(
+        height:
+            200, // Define una altura fija para evitar problemas de tamaño infinito.
+        child: Column(
+          children: [
+            Container(
+              height: 65,
+              color: cardColor,
+              width: double.infinity,
+            ),
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.all(8.0),
+                children: [
+                  ListTile(
+                    title: Text(title),
+                    subtitle: Text(subtitle),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
